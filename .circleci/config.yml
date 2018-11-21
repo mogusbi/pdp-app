@@ -108,7 +108,7 @@ jobs:
       - setup_remote_docker
       - restore_cache:
           keys:
-            - pdp-aws-{{ checksum "requirements.json" }}
+            - pdp-aws-{{ checksum "requirements.txt" }}
             - pdp-aws-
       - run:
           command: |
