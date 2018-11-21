@@ -64,6 +64,36 @@ jobs:
           command: npm run e2e
           name: Integration tests
 
+  build:
+    docker:
+      - image: circleci/node:8.10.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pdp-dependencies-{{ checksum "package.json" }}
+            - pdp-dependencies-
+      - run:
+          command: npm run build
+          name: Build application
+      - run:
+          name: Set convenience environment variables
+          command: |
+            echo 'export FULL_CONTAINER_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:${CIRCLE_SHA1}"' >> $BASH_ENV
+      - run:
+          command: docker build -t $FULL_CONTAINER_NAME .
+          name: Build container
+      - run:
+          name: Archive container
+          command: |
+            mkdir containers
+            docker save -o containers/app.tar $FULL_CONTAINER_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - containers
+
 workflows:
   version: 2
 
@@ -76,3 +106,7 @@ workflows:
       - integration-test:
           requires:
             - init
+      - build:
+          requires:
+            - unit-test
+            - integration-test
