@@ -149,9 +149,9 @@ workflows:
             - integration-test
       - ecr-deploy:
           filters:
-          branches:
-            only:
-              - docker
-              - master
+            branches:
+              only:
+                - docker
+                - master
           requires:
             - build
