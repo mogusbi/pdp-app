@@ -39,11 +39,10 @@ jobs:
   integration-test:
     docker:
       - image: circleci/node:8.10.0
-      - image: circleci/dynamodb
       - image: circleci/mysql:5.6
         environment:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_USER: pdp
+          MYSQL_USER: sage
           MYSQL_PASSWORD: password
     working_directory: ~/repo
     steps:
@@ -59,7 +58,7 @@ jobs:
           name: Install MySQL client
       - run:
           command: |
-            mysql -h 127.0.0.1 -u root -ppassword < environments/mysql/predictor-testing.sql
+            mysql -h 127.0.0.1 -u root -ppassword < setup/mysql/init-test-db.sql
           name: Set up database
       - run:
           command: npm run e2e
