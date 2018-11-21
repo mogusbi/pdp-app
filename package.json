@@ -2,8 +2,9 @@
   "name": "pdp-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/main.js",
   "scripts": {
+    "build": "tsc",
     "create-migration": "typeorm migration:create -n",
     "e2e": "jest --config=e2e/jest.config.js --runInBand --forceExit",
     "environment": "docker-compose -p pdp up",
