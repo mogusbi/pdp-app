@@ -1,0 +1,20 @@
+version: "3"
+
+networks:
+  pdp:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:5.6
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: sage
+      MYSQL_PASSWORD: password
+    networks:
+      - pdp
+    ports:
+      - 3306:3306
+    restart: always
+    volumes:
+      - ./setup/mysql:/docker-entrypoint-initdb.d

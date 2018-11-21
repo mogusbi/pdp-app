@@ -4,8 +4,8 @@ import {TaskModule} from './task';
 
 @Module({
   imports: [
-    TaskModule,
-    TypeOrmModule.forRoot()
+    TypeOrmModule.forRoot(),
+    TaskModule
   ]
 })
 export class AppModule {}
