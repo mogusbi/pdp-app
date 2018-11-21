@@ -79,21 +79,57 @@ jobs:
           name: Build application
       - setup_remote_docker
       - run:
-          name: Set convenience environment variables
           command: |
             echo 'export FULL_CONTAINER_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:${CIRCLE_SHA1}"' >> $BASH_ENV
+          name: Set convenience environment variables
       - run:
           command: docker build -t $FULL_CONTAINER_NAME .
           name: Build container
       - run:
-          name: Archive container
           command: |
             mkdir containers
             docker save -o containers/app.tar $FULL_CONTAINER_NAME
+          name: Archive container
       - persist_to_workspace:
           root: .
           paths:
             - containers
+
+  deploy:
+    docker:
+      - image: circleci/python:3.6.1
+    environment:
+      AWS_DEFAULT_OUTPUT: json
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - pdp-aws-{{ checksum "requirements.json" }}
+            - pdp-aws-
+      - run:
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+          name: Install AWS CLI
+      - save_cache:
+          key: pdp-aws-{{ checksum "requirements.txt" }}
+          paths:
+            - venv
+      - run:
+          command: |
+            docker load --input containers/app.tar
+          name: Load container
+      - run:
+          command: |
+            . venv/bin/activate
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$CIRCLE_SHA1
+          name: Push to ECR
 
 workflows:
   version: 2
@@ -111,3 +147,6 @@ workflows:
           requires:
             - unit-test
             - integration-test
+      - deploy:
+          requires:
+            - build
