@@ -95,7 +95,7 @@ jobs:
           paths:
             - containers
 
-  deploy:
+  ecr-deploy:
     docker:
       - image: circleci/python:3.6.1
     environment:
@@ -147,6 +147,11 @@ workflows:
           requires:
             - unit-test
             - integration-test
-      - deploy:
+      - ecr-deploy:
+          filters:
+          branches:
+            only:
+              - docker
+              - master
           requires:
             - build
