@@ -16,6 +16,7 @@
     "max-classes-per-file": [false],
     "max-func-body-length": false,
     "max-line-length": [false],
+    "missing-jsdoc": false,
     "no-backbone-get-set-outside-model": false,
     "no-implicit-dependencies": false,
     "no-multiline-string": false,

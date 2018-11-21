@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {Repository} from 'typeorm';
+import {DeleteResult, Repository, UpdateResult} from 'typeorm';
 import {TaskDto} from './task.dto';
 import {Task} from './task.entity';
 
