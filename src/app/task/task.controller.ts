@@ -24,8 +24,8 @@ export class TaskController {
   @Patch(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   public async httpPatch (
-    @Body() body: TaskDto,
-    @Param('id') id: string
+    @Param('id') id: string,
+    @Body() body: TaskDto
   ): Promise<void> {
     await this.taskService.update(id, body);
   }

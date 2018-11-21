@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "environment": "docker-compose -p pdp up",
-    "start": "nodemon --exec ts-node src/main.ts"
+    "start": "nodemon --exec ts-node src/main.ts",
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -38,5 +39,33 @@
     "tslint": "^5.11.0",
     "tslint-microsoft-contrib": "^5.2.1",
     "typescript": "^3.1.6"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/src/**/*.ts",
+      "!**/e2e/**/*.ts",
+      "!**/src/**/*.dto.ts",
+      "!**/src/**/*.entity.ts",
+      "!**/src/**/*.model.ts",
+      "!**/src/**/*.module.ts",
+      "!**/src/**/*.providers.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "index.ts",
+      "main.ts",
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ],
+    "testMatch": [
+      "**/+(*.)+(spec|test).+(ts|js)?(x)"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
   }
 }

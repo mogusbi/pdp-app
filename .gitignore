@@ -151,13 +151,7 @@ jspm_packages/
 # dotenv environment variables file
 .env
 
-# Lerna
-lerna-debug.log
-packages/*/lib
-services/*/lib
-
 # Project files
 dist
 reports
 tmp
-docs
