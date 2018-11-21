@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "create-migration": "typeorm migration:create -n",
+    "e2e": "jest --config=e2e/jest.config.js --runInBand --forceExit",
     "environment": "docker-compose -p pdp up",
     "start": "nodemon --exec ts-node src/main.ts",
     "test": "jest --coverage"

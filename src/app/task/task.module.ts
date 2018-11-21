@@ -9,9 +9,12 @@ import {TaskService} from './task.service';
     TaskController
   ],
   imports: [
-    TypeOrmModule.forFeature([
-      Task
-    ])
+    TypeOrmModule.forFeature(
+      [
+        Task
+      ],
+      process.env.NODE_ENV === 'test' ? 'test' : null
+    )
   ],
   providers: [
     TaskService
