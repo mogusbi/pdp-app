@@ -1,7 +1,8 @@
 import {INestApplication} from '@nestjs/common';
 import {Test, TestingModule} from '@nestjs/testing';
-import {TypeOrmModule, TypeOrmModuleOptions} from '@nestjs/typeorm';
+import {TypeOrmModule} from '@nestjs/typeorm';
 import * as supertest from 'supertest';
+import * as ormconfig from '../../../ormconfig';
 import {TaskModule} from '../../../src/app/task';
 
 describe('Tasks endpoint', (): void => {
@@ -14,7 +15,7 @@ describe('Tasks endpoint', (): void => {
       .createTestingModule({
         imports: [
           TaskModule,
-          TypeOrmModule.forRoot(<TypeOrmModuleOptions>'test')
+          TypeOrmModule.forRoot(ormconfig[1])
         ]
       })
       .compile();
