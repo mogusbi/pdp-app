@@ -21,6 +21,9 @@ case 'test':
 default:
   config.database = 'app';
   config.logging = true;
+  config.cli = {
+    migrationsDir: 'migrations'
+  };
 }
 
 module.exports = config;
