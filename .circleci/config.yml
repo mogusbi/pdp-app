@@ -1,0 +1,79 @@
+version: 2
+
+jobs:
+  init:
+    docker:
+      - image: circleci/node:8.10.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pdp-dependencies-{{ checksum "package.json" }}
+            - pdp-dependencies-
+      - run:
+          command: npm i
+          name: Install dependencies
+      - save_cache:
+          key: pdp-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          command: npm run lint
+          name: Lint code
+
+  unit-test:
+    docker:
+      - image: circleci/node:8.10.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pdp-dependencies-{{ checksum "package.json" }}
+            - pdp-dependencies-
+      - run:
+          command: npm run test
+          name: Unit tests
+
+  integration-test:
+    docker:
+      - image: circleci/node:8.10.0
+      - image: circleci/dynamodb
+      - image: circleci/mysql:5.6
+        environment:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_USER: pdp
+          MYSQL_PASSWORD: password
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pdp-dependencies-{{ checksum "package.json" }}
+            - pdp-dependencies-
+      - run:
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y mysql-client
+          name: Install MySQL client
+      - run:
+          command: |
+            mysql -h 127.0.0.1 -u root -ppassword < environments/mysql/predictor-testing.sql
+          name: Set up database
+      - run:
+          command: npm run e2e
+          name: Integration tests
+
+workflows:
+  version: 2
+
+  build-and-test:
+    jobs:
+      - init
+      - unit-test:
+          requires:
+            - init
+      - integration-test:
+          requires:
+            - init
