@@ -15,7 +15,7 @@ describe('Tasks endpoint', (): void => {
       .createTestingModule({
         imports: [
           TaskModule,
-          TypeOrmModule.forRoot(ormconfig[1])
+          TypeOrmModule.forRoot(ormconfig)
         ]
       })
       .compile();

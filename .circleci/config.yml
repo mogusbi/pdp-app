@@ -64,7 +64,7 @@ jobs:
           command: npm run e2e
           name: Integration tests
 
-  build:
+  build-container:
     docker:
       - image: circleci/node:8.10.0
     working_directory: ~/repo
@@ -143,15 +143,15 @@ workflows:
       - integration-test:
           requires:
             - init
-      - build:
-          requires:
-            - unit-test
-            - integration-test
-      - ecr-deploy:
+      - build-container:
           filters:
             branches:
               only:
                 - docker
                 - master
           requires:
-            - build
+            - unit-test
+            - integration-test
+      - ecr-deploy:
+          requires:
+            - build-container

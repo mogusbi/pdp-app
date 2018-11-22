@@ -1,5 +1,5 @@
 import {MigrationInterface, QueryRunner} from 'typeorm';
-import {Task} from '../src/app/task';
+import {Task} from '../app/task';
 
 export class PopulateTasks1542813367315 implements MigrationInterface {
   private table: string = 'task';
