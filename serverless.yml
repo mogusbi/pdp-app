@@ -11,6 +11,7 @@ plugins:
 provider:
   name: aws
   runtime: nodejs8.10
+  region: ${opt:region, 'eu-west-1'}
   stage: ${opt:stage, 'production'}
   environment:
     STAGE: ${self:provider.stage}
