@@ -131,6 +131,20 @@ jobs:
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$CIRCLE_SHA1
           name: Push to ECR
 
+  lambda-deploy-qa:
+    docker:
+      - image: circleci/node:8.10.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pdp-dependencies-{{ checksum "package.json" }}
+            - pdp-dependencies-
+      - run:
+          command: npm run serverless deploy -- --verbose --stage qa
+          name: Deploy to AWS
+
 workflows:
   version: 2
 
@@ -143,6 +157,15 @@ workflows:
       - integration-test:
           requires:
             - init
+      - lambda-deploy-qa:
+          filters:
+            branches:
+              only:
+                - lambda
+                - master
+          requires:
+            - unit-test
+            - integration-test
       - build-container:
           filters:
             branches:
