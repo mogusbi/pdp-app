@@ -145,6 +145,34 @@ jobs:
           command: npm run serverless deploy -- --verbose --stage qa
           name: Deploy to AWS
 
+  lambda-deploy-staging:
+    docker:
+      - image: circleci/node:8.10.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pdp-dependencies-{{ checksum "package.json" }}
+            - pdp-dependencies-
+      - run:
+          command: npm run serverless deploy -- --verbose --stage staging
+          name: Deploy to AWS
+
+  lambda-deploy-production:
+    docker:
+      - image: circleci/node:8.10.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pdp-dependencies-{{ checksum "package.json" }}
+            - pdp-dependencies-
+      - run:
+          command: npm run serverless deploy -- --verbose --stage production
+          name: Deploy to AWS
+
 workflows:
   version: 2
 
@@ -166,6 +194,18 @@ workflows:
           requires:
             - unit-test
             - integration-test
+      - lambda-deploy-staging:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - lambda-deploy-qa
+          type: approval
+      - lambda-deploy-production:
+          requires:
+            - lambda-deploy-staging
+          type: approval
       - build-container:
           filters:
             branches:
