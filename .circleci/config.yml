@@ -142,7 +142,7 @@ jobs:
             - pdp-dependencies-{{ checksum "package.json" }}
             - pdp-dependencies-
       - run:
-          command: npm run serverless deploy -- --verbose --stage qa
+          command: npm run serverless remove -- --verbose --stage qa
           name: Deploy to AWS
 
 workflows:
