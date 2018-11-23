@@ -8,11 +8,13 @@ import {Connection, getConnection} from 'typeorm';
 import {AppModule} from './app';
 
 export const handler: Handler = async (event: APIGatewayEvent, context: Context): Promise<Response> => {
-  const connection: Connection = getConnection();
+  try {
+    const connection: Connection = getConnection();
 
-  if (connection.isConnected) {
-    await connection.close();
-  }
+    if (connection.isConnected) {
+      await connection.close();
+    }
+  } catch (e) {}
 
   const expressApp: express.Express = express();
   const app: INestApplication = await NestFactory.create(AppModule, expressApp);
