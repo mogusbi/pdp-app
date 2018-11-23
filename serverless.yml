@@ -13,9 +13,23 @@ provider:
   runtime: nodejs8.10
   region: ${opt:region, 'eu-west-1'}
   stage: ${opt:stage, 'production'}
+  vpc:
+    securityGroupIds:
+      - sg-00e165ca294f5d8d1
+    subnetIds:
+      - subnet-058800fc8329b09e6
+      - subnet-06c5f05352695b97c
+      - subnet-06312c36d5b8830a7
   environment:
     STAGE: ${self:provider.stage}
     NODE_ENV: lambda
+    TYPEORM_CONNECTION: ${env:TYPEORM_CONNECTION}
+    TYPEORM_DATABASE: ${env:TYPEORM_DATABASE}
+    TYPEORM_HOST: ${env:TYPEORM_HOST}
+    TYPEORM_LOGGING: ${env:TYPEORM_LOGGING}
+    TYPEORM_PASSWORD: ${env:TYPEORM_PASSWORD}
+    TYPEORM_PORT: ${env:TYPEORM_PORT}
+    TYPEORM_USERNAME: ${env:TYPEORM_USERNAME}
 
 custom:
   webpack:
