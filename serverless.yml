@@ -33,7 +33,9 @@ provider:
 
 custom:
   webpack:
-    includeModules: true
+    includeModules:
+      forceInclude:
+        - mysql
 
 functions:
   tasks-get-all:
