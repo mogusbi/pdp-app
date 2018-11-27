@@ -1,8 +1,9 @@
 const isLambda = process.env.NODE_ENV === 'lambda';
 const isTest = process.env.NODE_ENV === 'test';
-const usingEnv = !['undefined', undefined, null].includes(process.env.TYPEORM_CONNECTION);
+const usingEnv = !['', 'undefined', undefined, null].includes(process.env.TYPEORM_CONNECTION);
 
-console.log(usingEnv)
+console.log(usingEnv);
+console.log(process.env.TYPEORM_CONNECTION);
 
 let config = {
   host: 'localhost',
