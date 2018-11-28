@@ -23,7 +23,7 @@ provider:
       - subnet-06312c36d5b8830a7
   environment:
     STAGE: ${self:provider.stage}
-    NODE_ENV: lambda
+    NODE_ENV: ${env:NODE_ENV, 'production'}
     TYPEORM_CONNECTION: ${env:TYPEORM_CONNECTION}
     TYPEORM_DATABASE: ${env:TYPEORM_DATABASE}
     TYPEORM_HOST: ${env:TYPEORM_HOST}

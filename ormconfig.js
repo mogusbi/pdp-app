@@ -1,8 +1,13 @@
-const isLambda = process.env.NODE_ENV === 'lambda';
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isLambda = process.env.STAGE === 'production';
+const isProduction = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
-const usingEnv = !['undefined', undefined, null].includes(process.env.TYPEORM_CONNECTION);
 
 let config = {
+  entities: [
+    '.build/src/**/*.entity.js',
+    'src/**/*.entity.ts'
+  ],
   host: 'localhost',
   password: 'password',
   port: 3306,
@@ -11,23 +16,30 @@ let config = {
   username: 'sage'
 };
 
-if (!isLambda) {
+if (isDevelopment) {
+  config.database = 'app';
+  config.logging = true;
+} else if (isTest) {
+  config.database = 'app_testing';
+  config.logging = false;
+  config.name = 'test';
+}
+
+if (isLambda) {
+  config.entities = [
+    '.build/src/**/*.entity.js'
+  ];
+} else {
   config.cli = {
     migrationsDir: 'src/migrations'
   };
+  config.entities = [
+    'src/**/*.entity.ts'
+  ];
   config.migrations = [
     'src/migrations/**/*.ts'
   ];
   config.migrationsRun = true;
 }
 
-if (isTest) {
-  config.database = 'app_testing';
-  config.logging = false;
-  config.name = 'test';
-} else  {
-  config.database = 'app';
-  config.logging = true;
-}
-
-module.exports = usingEnv ? isTest ? config : {} : config;
+module.exports = isProduction ? {} : config;
