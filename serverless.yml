@@ -5,7 +5,7 @@ package:
   individually: true
 
 plugins:
-  - serverless-webpack
+  - serverless-plugin-typescript
   - serverless-offline
 
 provider:
@@ -24,14 +24,23 @@ provider:
   environment:
     STAGE: ${self:provider.stage}
     NODE_ENV: lambda
-    TYPEORM_CONNECTION: ${env:TYPEORM_CONNECTION}
-    TYPEORM_DATABASE: ${env:TYPEORM_DATABASE}
-    TYPEORM_HOST: ${env:TYPEORM_HOST}
-    TYPEORM_LOGGING: ${env:TYPEORM_LOGGING}
+    TYPEORM_CONNECTION: mysql
+    TYPEORM_DATABASE: app
+#    TYPEORM_ENTITIES: '**/*.entity.js'
+    TYPEORM_HOST: localhost
+    TYPEORM_LOGGING: true
     TYPEORM_MAX_QUERY_EXECUTION_TIME: 60000
-    TYPEORM_PASSWORD: ${env:TYPEORM_PASSWORD}
-    TYPEORM_PORT: ${env:TYPEORM_PORT}
-    TYPEORM_USERNAME: ${env:TYPEORM_USERNAME}
+    TYPEORM_PASSWORD: password
+    TYPEORM_PORT: 3306
+    TYPEORM_USERNAME: sage
+#    TYPEORM_CONNECTION: ${env:TYPEORM_CONNECTION}
+#    TYPEORM_DATABASE: ${env:TYPEORM_DATABASE}
+#    TYPEORM_HOST: ${env:TYPEORM_HOST}
+#    TYPEORM_LOGGING: ${env:TYPEORM_LOGGING}
+#    TYPEORM_MAX_QUERY_EXECUTION_TIME: 60000
+#    TYPEORM_PASSWORD: ${env:TYPEORM_PASSWORD}
+#    TYPEORM_PORT: ${env:TYPEORM_PORT}
+#    TYPEORM_USERNAME: ${env:TYPEORM_USERNAME}
 
 custom:
   webpack:

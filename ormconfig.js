@@ -15,10 +15,6 @@ if (!isLambda) {
   config.cli = {
     migrationsDir: 'src/migrations'
   };
-  config.entities = [
-    'src/**/*.entity.ts'
-  ];
-
   config.migrations = [
     'src/migrations/**/*.ts'
   ];
@@ -34,4 +30,4 @@ if (isTest) {
   config.logging = true;
 }
 
-module.exports = usingEnv ? isTest ? config : null : config;
+module.exports = usingEnv ? isTest ? config : {} : config;
