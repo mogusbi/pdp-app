@@ -13,6 +13,7 @@ provider:
   runtime: nodejs8.10
   region: ${opt:region, 'eu-west-1'}
   stage: ${opt:stage, 'production'}
+  timeout: 60
   vpc:
     securityGroupIds:
       - sg-00e165ca294f5d8d1
